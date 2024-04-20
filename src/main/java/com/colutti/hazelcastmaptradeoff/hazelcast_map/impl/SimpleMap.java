@@ -6,6 +6,8 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class SimpleMap implements AffectMap<IMap<String, String>> {
 
@@ -21,8 +23,10 @@ public class SimpleMap implements AffectMap<IMap<String, String>> {
     }
 
     @Override
-    public void updateMap(RequestMapDto requestMapDto) {
-        IMap<String, String> actualMap = hazelcastInstance.getMap(requestMapDto.getMapName());
-        actualMap.put(requestMapDto.getKey(), requestMapDto.getValue());
+    public void updateMap(List<RequestMapDto> requestMapDtoList) {
+        requestMapDtoList.forEach(requestMapDto -> {
+            IMap<String, String> actualMap = hazelcastInstance.getMap(requestMapDto.getMapName());
+            actualMap.put(requestMapDto.getKey(), requestMapDto.getValue());
+        });
     }
 }

@@ -1,6 +1,5 @@
 package com.colutti.hazelcastmaptradeoff.config_map;
 
-import com.colutti.hazelcastmaptradeoff.dto.RequestMapDto;
 import com.colutti.hazelcastmaptradeoff.hazelcast_map.impl.SimpleMap;
 import com.google.gson.Gson;
 import com.hazelcast.map.IMap;
@@ -22,16 +21,8 @@ public class MixInMap implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        System.out.println("Aplicação Spring Boot inicializada com sucesso!");
         IMap<String, String> simpleMapResponse = this.simpleMap.getFullMap(SIMPLE_MAP_NAME);
-        System.out.println("Simple Map values");
+        System.out.println("Map size: "+ simpleMapResponse.size());
         System.out.println(this.gson.toJson(simpleMapResponse));
-        simpleMapResponse.forEach((key, value) ->{
-            RequestMapDto requestMapDto = new RequestMapDto();
-            requestMapDto.setMapName(SIMPLE_MAP_NAME);
-            requestMapDto.setKey(key);
-            requestMapDto.setValue(value);
-            this.simpleMap.updateMap(requestMapDto);
-        });
     }
 }
